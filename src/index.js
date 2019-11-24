@@ -67,11 +67,7 @@ function isSomeTrue(array, fn) {
                 trueResult++;
             }
         }
-        if (trueResult >= 1) {
-            return true;
-        } else  {
-            return false;
-        }
+        return trueResult >= 1
     }
 }
 
@@ -123,38 +119,21 @@ function returnBadArguments(fn) {
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator(number=0) {
-    if(typeof (number) != 'number') {
+function calculator(number = 0) {
+    if (typeof (number) != 'number') {
         throw new Error("number is not a number");
     }
+
     let object = {
-        sum: function () {
-            for(let i=0; i<arguments.length;i++) {
-                number+=arguments[i];
+        sum: (...args) => args.reduce((val, current) => val + current, number),
+        dif: (...args) => args.reduce((val, current) => val - current, number),
+        div: (...args) => (args.reduce((val, current) => {
+            if (current === 0) {
+                throw new Error("division by 0");
             }
-            return number;
-        },
-        dif: function () {
-            for(let i=0; i<arguments.length;i++) {
-                number-=arguments[i];
-            }
-            return number;
-        },
-        div: function () {
-            for(let i=0; i<arguments.length;i++) {
-                if(arguments[i] === 0) {
-                    throw new Error("division by 0");
-                }
-                number/=arguments[i];
-            }
-            return number;
-        },
-        mul: function () {
-            for(let i=0; i<arguments.length;i++) {
-                number*=arguments[i];
-            }
-            return number;
-        },
+            return val / current
+        }, number)),
+        mul: (...args) => args.reduce((val, current) => val * current, number),
 
     }
     return object
