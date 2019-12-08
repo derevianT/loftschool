@@ -43,7 +43,7 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-window.addEventListener('load', ()=>{
+window.addEventListener('load', function() {
     const allCookie = parseCookie();
     fillRows(allCookie);
 });
@@ -60,17 +60,7 @@ addButton.addEventListener('click', function () {
     addCookie(cookieName,cookieValue);
     fillRows(parseCookie());
 });
-filterNameInput.addEventListener('keyup',function () {
-    const filterValue = filterNameInput.value;
-    let cookie = parseCookie();
-    for(let val in cookie) {
-        const res = toString(val+cookie[val]);
-        console.log(res);
-    }
 
-
-
-});
 function crateTableRow(name,value) {
     const tr = document.createElement('tr');
     const tdName = document.createElement('td');
