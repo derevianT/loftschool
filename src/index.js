@@ -36,17 +36,15 @@ function loadAndSortTowns() {
         myRequest.open('POST', url);
         myRequest.responseType = 'json';
         myRequest.addEventListener('load', function () {
-
             resolve(myRequest.response.sort(function (a, b) {
-                if (a.name > b.name) {
-                    return 1;
-                }
-                if (a.name < b.name) {
-                    return -1;
-                }
-                return 0;
+                a.name > b.name ? 1: -1;
             }));
 
+        });
+        myRequest.addEventListener('readystatechange',function () {
+            if (myRequest.status>=400) {
+                reject(myRequest.response);
+            }
         });
         request.send();
     });
