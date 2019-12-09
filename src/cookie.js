@@ -43,7 +43,7 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-window.addEventListener('load', function() {
+window.addEventListener('load', ()=>{
     const allCookie = parseCookie();
     fillRows(allCookie);
 });
@@ -60,26 +60,15 @@ addButton.addEventListener('click', function () {
     addCookie(cookieName,cookieValue);
     fillRows(parseCookie());
 });
-
+filterNameInput.addEventListener('keyup',function () {
+    const value = filterNameInput.value;
+    const allCookie = parseCookie();
+    const filteredValue = filterCookie(value, allCookie);
+    fillRows(filteredValue);
+});
 function crateTableRow(name,value) {
     const tr = document.createElement('tr');
-    const tdName = document.createElement('td');
-    const tdValue = document.createElement('td');
-    const tdRemove = document.createElement('td');
-    const button = document.createElement('button');
-
-    tdName.innerText = name;
-    tdValue.innerText = value;
-    button.innerText = 'Удалить';
-
-    button.dataset.name = name;
-    button.classList.add('remove-button');
-    tdRemove.appendChild(button);
-
-    tr.classList.add(name);
-    tr.appendChild(tdName);
-    tr.appendChild(tdValue);
-    tr.appendChild(tdRemove);
+    tr.innerHTML = '<td>'+name+'</td><td>'+value+'</td><td><button data-name="'+name+ '" class="remove-button">Удалить</button></td>';
     listTable.appendChild(tr);
 }
 
@@ -108,4 +97,18 @@ function deleteCookie(name) {
 }
 function removeRow(row) {
     row.parentNode.removeChild(row);
+}
+
+function isMatching(full, chunk) {
+    let regexp = new RegExp(chunk, 'i');
+    return (full.search(regexp) > -1);
+}
+function filterCookie(value, cookie) {
+    let filtered = {};
+    for (let key in cookie) {
+        if (isMatching(key, value) || isMatching(cookie[key], value)) {
+            filtered[key] = cookie[key];
+        }
+    }
+    return filtered;
 }
